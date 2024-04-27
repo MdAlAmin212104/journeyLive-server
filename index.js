@@ -34,14 +34,14 @@ async function run() {
     const spotCollection = client.db("DB_spot").collection("spot");
 
 
-    app.post('/product', async (req, res) => {
+    app.post('/sport', async (req, res) => {
       const newProduct = req.body;
       console.log(newProduct);
       const result = await spotCollection.insertOne(newProduct);
       res.send(result)
     })
 
-    app.patch('/product/:id', async (req, res) => {
+    app.patch('/sport/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const option = { upsert: true };
@@ -66,11 +66,13 @@ async function run() {
 
     })
 
-    app.get('/product', async (req, res) => {
+    app.get('/sport', async (req, res) => {
       const courser = spotCollection.find();
       const result = await courser.toArray();
       res.send(result)
     })
+
+    
 
     app.get('/sport/:id', async (req, res) => {
       const id = req.params.id;
@@ -78,6 +80,17 @@ async function run() {
       const result = await spotCollection.findOne(query);
       res.send(result);
     })
+
+    app.get('/sportByEmail/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = {email: email};
+      const courser = spotCollection.find(query);
+      const result = await courser.toArray();
+      res.send(result)
+    })
+
+    
+
 
     app.delete('/sport/:id', async (req, res) => {
       const id = req.params.id;
