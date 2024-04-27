@@ -41,6 +41,31 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/product/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      const updateSport = req.body;
+      const sport = {
+        $set: {
+          name: updateSport.name,
+          countryName: updateSport.countryName,
+          location: updateSport.location,
+          seasonality: updateSport.seasonality,
+          time: updateSport.time,
+          cost: updateSport.cost,
+          visitors: updateSport.visitors,
+          rating: updateSport.rating,
+          photo: updateSport.photo,
+          desc: updateSport.desc,
+        }
+        
+      }
+      const result = await spotCollection.updateOne(filter, sport, option)
+      res.send(result);
+
+    })
+
     app.get('/product', async (req, res) => {
       const courser = spotCollection.find();
       const result = await courser.toArray();
@@ -52,6 +77,14 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await spotCollection.findOne(query);
       res.send(result);
+    })
+
+    app.delete('/sport/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await spotCollection.deleteOne(query);
+      res.send(result);
+
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
