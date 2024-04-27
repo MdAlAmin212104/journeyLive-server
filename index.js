@@ -1,7 +1,7 @@
 const express = require('express'); 
 const cors = require('cors'); 
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -45,6 +45,13 @@ async function run() {
       const courser = spotCollection.find();
       const result = await courser.toArray();
       res.send(result)
+    })
+
+    app.get('/sport/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await spotCollection.findOne(query);
+      res.send(result);
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
