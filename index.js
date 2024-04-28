@@ -10,6 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 
+
+
 const userName = process.env.DB_USERNAME;
 const password = process.env.DB_PASS
 
@@ -89,6 +91,14 @@ async function run() {
       res.send(result)
     })
 
+
+    app.get('/sportByCountry/:countryName', async (req, res) => {
+      const countryName = req.params.countryName;
+      const query = { countryName: countryName };
+      const courser = spotCollection.find(query);
+      const result = await courser.toArray();
+      res.send(result)
+    })
     
 
 
@@ -99,6 +109,21 @@ async function run() {
       res.send(result);
 
     })
+
+    const countryCollection = client.db("DB_spot").collection("country");
+
+
+    app.get('/country', async (req, res) => {
+      const courser = countryCollection.find();
+      const result = await courser.toArray();
+      res.send(result);
+
+
+    })
+
+
+    
+
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
